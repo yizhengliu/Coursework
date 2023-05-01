@@ -39,6 +39,8 @@ public static class GlobalStates
     public static int NumOfBattle { get { return numOfBattle; } }
     public static void battleFinished()
     {
+
+
         if (numOfBattle > 1)
             return;
         numOfBattle++;

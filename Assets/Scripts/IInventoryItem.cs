@@ -36,7 +36,16 @@ public class IInventoryItem
             default: return -1;
         }
     }
+    public void used() 
+    {
+        currentCooldown = cooldown;
+    }
 
+    public void onCooldownReduced() 
+    {
+        if (--currentCooldown < 0)
+            currentCooldown = 0;
+    }
     public void resetCooldown() { currentCooldown = 0; }
     public const int INDEX = 0;
     public const int ATK = 1;

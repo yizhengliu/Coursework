@@ -3240,14 +3240,14 @@ MonoBehaviour:
   enemyLowHP: {fileID: 1527223600}
   DebuffIndicator: {fileID: 1630120150}
   UI: {fileID: 459595994395821104}
-  Tutorial: {fileID: 0}
+  Tutorial: {fileID: 1272646736}
   DebuffIndicators:
   - {fileID: 1785317729}
   - {fileID: 1311769313}
   DebuffRounds:
   - {fileID: 1328866206}
   - {fileID: 456714737}
-  RoundInfo: {fileID: 0}
+  RoundInfo: {fileID: 1052260972}
 --- !u!4 &1090408733
 Transform:
   m_ObjectHideFlags: 0

@@ -89,7 +89,6 @@ public class BattleSystem : MonoBehaviour
     }
 
     public void onClickBattleStart() {
-        //MISSING COOLDOWN ~~~~~~~~~!!!!
 
         //attack enemy
         float critChangce = 
@@ -150,7 +149,8 @@ public class BattleSystem : MonoBehaviour
         {
             if (MonsterManager.Instance.isDead())
             {
-                //if BOSS? MISSING ~~~~~~!!!!!!!!!!!!!!!!!
+                if (MonsterManager.Instance.MonsterIndex > 13)
+                    GlobalStates.stageCleared();
                 GlobalStates.battleFinished();
                 popUp();
             }

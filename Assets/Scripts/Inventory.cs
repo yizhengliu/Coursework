@@ -100,7 +100,13 @@ public class Inventory : MonoBehaviour
         int totalDmg = 0;
         for (int i = 0; i < selectedChips.Length; i++)
             if (selectedChips[i])
+            {
                 totalDmg += items[i].getProperty(IInventoryItem.ATK);
+                items[i].used();
+            }
+            else 
+                items[i].onCooldownReduced();
+        ItemUsed?.Invoke(this, null);
         return totalDmg;
     }
 

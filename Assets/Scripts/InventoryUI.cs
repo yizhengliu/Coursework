@@ -165,8 +165,8 @@ public class InventoryUI : MonoBehaviour
         foreach (Image i in chips)
             i.color = Color.white;
         lastSelectedItem = -1;
-        seeDetail.gameObject.SetActive(false);
-        discard.gameObject.SetActive(false);
+        seeDetail.interactable = false;
+        discard.interactable = false;
     }
 
     public void discardItem()
