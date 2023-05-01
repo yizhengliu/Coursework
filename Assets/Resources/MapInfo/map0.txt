@@ -1,0 +1,16 @@
+x e e e x
+x x e e x
+x e r(e) x x
+x x d21 e x
+x x x m4 x
+x x x c(g) x
+x x e e x
+x e b20 x x
+x m4 x x x
+x b20 x x x
+x c(0) c(g,0) x x 
+x m5 m4 e x
+x b20 e x x
+x e c(g,0) x x
+x m14 x x x
+x M x x x
