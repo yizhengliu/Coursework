@@ -78,6 +78,7 @@ public class Inventory : MonoBehaviour
         string[] itemAttributes = textAsset.text.Split('\n');
         IInventoryItem item = new IInventoryItem(itemAttributes, index);
         closet.Add(item);
+        ItemAdded?.Invoke(this, null);
     }
     public void useItem(int indexCount)
     {

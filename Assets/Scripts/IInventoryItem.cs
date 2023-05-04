@@ -31,6 +31,7 @@ public class IInventoryItem
             case INDEX: return index;
             case ATK: return atk;
             case DEF: return def;
+            case VALUE: return value; 
             case COOLDOWN: return cooldown;
             case PROPERTY: return property;
             default: return -1;
@@ -50,6 +51,7 @@ public class IInventoryItem
     public const int INDEX = 0;
     public const int ATK = 1;
     public const int DEF = 2;
+    public const int VALUE = 3;
     public const int COOLDOWN = 4;
     public const int PROPERTY = 5;
 

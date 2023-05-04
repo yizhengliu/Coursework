@@ -27,6 +27,12 @@ public class DungeonPlayerController : MonoBehaviour
     private void Awake()
     {
         dungeonManager.newAreaButtonPressed += HorizontalTransformation;
+        dungeonManager.sceneOver += unreg;
+    }
+    private void unreg(object sender, int pos) 
+    {
+        dungeonManager.newAreaButtonPressed -= HorizontalTransformation;
+        dungeonManager.sceneOver -= unreg;
     }
 
     private void HorizontalTransformation(object sender, int pos)

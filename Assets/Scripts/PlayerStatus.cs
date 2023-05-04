@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-public class PlayerStatus: MonoBehaviour
+public class PlayerStatus : MonoBehaviour
 {
     public const int UNDEFINED = -1;
     public const int CURRENT_HP = 0;
@@ -20,6 +20,7 @@ public class PlayerStatus: MonoBehaviour
     public const int ABILITY_NIRVANA = 2;
     public const int ABILITY_MISER = 3;
 
+    public const int LEVEL_LIMIT = -2;
     public const int NO_BONUS = -1;
     public const int LUCK_PLUS = 0;
     public const int ABILITY_PLUS = 1;
@@ -32,30 +33,36 @@ public class PlayerStatus: MonoBehaviour
     private static int level = 1;
     private static int exp = 0;
     private static int gold = 0;
-    private static int luck = 2; 
+    private static int luck = 2;
     private Dictionary<int, int> lvlBonuses = new Dictionary<int, int>();
     private int[] levelUpExpRequirement;
+
     private string[] descriptions;
-    [SerializeField]
     private TextMeshProUGUI descriptionDisplay;
 
     private string message;
     public string Message { get { return message; } }
-
+    public int Exp { get { return exp; } }
     public int MaxHP { get { return maxHP; } }
     private static List<int> abilities = new List<int>();
     private static Dictionary<int, int> conditions = new Dictionary<int, int>();
     public Dictionary<int, int> Conditions { get { return conditions; } }
     public List<int> Abilities { get { return abilities; } }
-
+    public TextMeshProUGUI DescriptionDispay { set { descriptionDisplay = value; } }
    
     public int Gold { get { return gold; } }
+
+    public int getExpRequirement() 
+    {
+        if (level > lvlBonuses.Count)
+            return levelUpExpRequirement[lvlBonuses.Count - 1];
+        return levelUpExpRequirement[level]; 
+    }
 
     private void Awake()
     {
         readExpRequirementInfo();
         readDescriptions();
-        loadDescription();
         //Check if instance already exists
         if (instance == null)
             //if not, set instance to this
@@ -93,15 +100,34 @@ public class PlayerStatus: MonoBehaviour
             return instance;
         }
     }
-    public void levelUp() {
-        switch (lvlBonuses[++level]) {
-            case LUCK_PLUS: luck++; break;
-            case ABILITY_PLUS:  break;
-            case INVENTORY_PLUS_PLUS: Inventory.Instance.lvlUp(2); break;
-            case INVENTORY_PLUS: Inventory.Instance.lvlUp(1); break;
-        }
+
+    public void restInInn() 
+    {
+        currentHP = maxHP;
+        conditions.Clear();
+    }
+    public int levelUp() {
+        if (level == 99)
+            return LEVEL_LIMIT;
+        if (level > lvlBonuses.Count)
+            exp -= levelUpExpRequirement[lvlBonuses.Count - 1];
+        else
+            exp -= levelUpExpRequirement[level - 1];
+        int bounusResult;
+        if (++level >= lvlBonuses.Count)
+            bounusResult = lvlBonuses[lvlBonuses.Count + 1];
+        else
+            bounusResult = lvlBonuses[level];
         maxHP += 40;
         currentHP = maxHP;
+        switch (bounusResult) {
+            case LUCK_PLUS: luck++; return LUCK_PLUS;
+            case ABILITY_PLUS: return ABILITY_PLUS;
+            case INVENTORY_PLUS_PLUS: Inventory.Instance.lvlUp(2); return INVENTORY_PLUS_PLUS;
+            case INVENTORY_PLUS: Inventory.Instance.lvlUp(1); return INVENTORY_PLUS;
+            default: return NO_BONUS;
+        }
+        
     }
 
     public void debuff(int condition) {
@@ -187,6 +213,10 @@ public class PlayerStatus: MonoBehaviour
             lvlBonuses.Add(i + 2, int.Parse(info[1]));
         }
     }
+    public void loadDescription() 
+    {
+        descriptionDisplay.text = descriptions[GlobalStates.StageExplored];
+    }
 
     private void readDescriptions()
     {
@@ -194,26 +224,35 @@ public class PlayerStatus: MonoBehaviour
         descriptions = textAsset.text.Split('\n');
     }
 
-    public void loadDescription() 
-    {
-        descriptionDisplay.text = descriptions[GlobalStates.StageExplored];
-    }
 
     public void monsterDefeated(int bounsGold, int bounsExp) 
     {
-        gold += bounsGold;
-        exp += bounsExp;
+        gold += Mathf.RoundToInt(bounsGold * (abilities.Contains(ABILITY_MISER) ? 1.2f : 1f));
+        exp += Mathf.RoundToInt(bounsExp * (abilities.Contains(ABILITY_BERSERKER) ? 1.2f : 1f));
+        if (abilities.Contains(ABILITY_HYPERMETABOLISM)) 
+        {
+            currentHP += Mathf.RoundToInt(0.15f * maxHP);
+            if (currentHP > maxHP)
+                currentHP = maxHP;
+        }
     }
 
     public int dmgedByMonster(int dmg) 
     {
         currentHP -= dmg;
+        if (currentHP <= 0 && abilities.Contains(ABILITY_NIRVANA))
+            if (Random.Range(0, 100) < 30)
+                currentHP = 1;
         return currentHP;
     }
 
     public void bonusChestGold(int amount) 
     {
         gold += amount;
+    }
+    public void gainAbility(int type) 
+    {
+        abilities.Add(type);
     }
 
 }

@@ -22,9 +22,18 @@ public class RouteController : MonoBehaviour
         dungeonManager.mapReaded += show;
         dungeonManager.newAreaMoved += GoToNextRoute;
         dungeonManager.randomRouteEntered += flipCard;
+        dungeonManager.sceneOver += unreg;
         //bind show with mapreaded function
         routeBackground = GetComponent<Image>();
         goToNext = GetComponent<Button>();
+    }
+
+    private void unreg(object sender, int args) 
+    {
+        dungeonManager.mapReaded -= show;
+        dungeonManager.newAreaMoved -= GoToNextRoute;
+        dungeonManager.randomRouteEntered -= flipCard;
+        dungeonManager.sceneOver -= unreg;
     }
 
     private void show(object sender, NextAreaInfoArgs args)

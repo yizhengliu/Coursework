@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -92,7 +93,7 @@ public class BattleSystem : MonoBehaviour
 
         //attack enemy
         float critChangce = 
-            Random.Range(0,100) < 
+            UnityEngine.Random.Range(0,100) < 
             int.Parse(PlayerStatus.Instance.getStatus(PlayerStatus.LUCK)) ? 
             1.75f : 1f;
 
@@ -149,10 +150,9 @@ public class BattleSystem : MonoBehaviour
         {
             if (MonsterManager.Instance.isDead())
             {
-                if (MonsterManager.Instance.MonsterIndex > 13)
-                    GlobalStates.stageCleared();
-                GlobalStates.battleFinished();
-                popUp();
+
+                battleEnd?.Invoke(this, null);
+                StartCoroutine(enemyDead());
             }
             else
                 MonsterManager.Instance.loadNextLife();
@@ -161,7 +161,19 @@ public class BattleSystem : MonoBehaviour
         checkPlayerHP();
         checkDebuff();
         checkMonsterHP();
+        onClickUnSelectAll();
+        battleStarted?.Invoke(this, null);
     }
+    IEnumerator enemyDead() 
+    {
+        enemyLowHP.SetBool("IsDead", true);
+        yield return new WaitUntil(isDead); 
+        if (MonsterManager.Instance.MonsterIndex > 13)
+            GlobalStates.stageCleared();
+        GlobalStates.battleFinished();
+        popUp();
+    }
+    private bool isDead() { return Enemy.color.a == 0; }
     private void addBuff(int type) 
     {
         if (nextRoundDebuff == type)
@@ -251,4 +263,6 @@ public class BattleSystem : MonoBehaviour
         else
             selectedChips[indexInArray] = true;
     }
+    public static event EventHandler<InventoryEventArgs> battleEnd;
+    public static event EventHandler<InventoryEventArgs> battleStarted;
 }

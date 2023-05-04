@@ -16,6 +16,8 @@ public class DungeonManager : MonoBehaviour
     public event EventHandler<NextAreaInfoArgs> mapReaded;
     // public event EventHandler<string[]> mapReaded;
     public event EventHandler<NextAreaInfoArgs> newAreaMoved;
+
+    public event EventHandler<int> sceneOver;
     public event EventHandler<int> newAreaButtonPressed;
     public event EventHandler<string[]> randomRouteEntered;
     [SerializeField]
@@ -40,6 +42,8 @@ public class DungeonManager : MonoBehaviour
     private TextMeshProUGUI[] ConditionTimers;
     [SerializeField]
     private Animator playerIllusory;
+    [SerializeField]
+    private TextMeshProUGUI description;
 
     private const int NOTHING = 0;
     private const int GOLD = 1;
@@ -49,9 +53,12 @@ public class DungeonManager : MonoBehaviour
     private void Awake()
     {
         Inventory.Instance.ItemRemoved += checkAvaiabilityChestPopUpButtons;
+
     }
     private void Start()
     {
+        PlayerStatus.Instance.DescriptionDispay = description;
+        PlayerStatus.Instance.loadDescription();
         readMapInfo();
         loadPlayerStats();
         checkPlayerHP();
@@ -76,18 +83,36 @@ public class DungeonManager : MonoBehaviour
         //check Player Conditions
         checkConditions(PlayerStatus.CONDITION_POISON);
         checkConditions(PlayerStatus.CONDITION_ILLUSORY);
+        checkAbilities(PlayerStatus.ABILITY_HYPERMETABOLISM);
+        checkAbilities(PlayerStatus.ABILITY_BERSERKER);
+        checkAbilities(PlayerStatus.ABILITY_MISER);
+        checkAbilities(PlayerStatus.ABILITY_NIRVANA);
+        PlayerStatus.Instance.loadDescription();
     }
+
+    [SerializeField]
+    private GameObject[] conditionsInTent;
+    [SerializeField]
+    private GameObject[] abilitiesInTent;
+    private void checkAbilities(int abilityType) 
+    {
+        abilitiesInTent[abilityType].SetActive(
+            PlayerStatus.Instance.Abilities.Contains(abilityType));
+    }
+
     private void checkConditions(int conditionType) 
     {
         if (PlayerStatus.Instance.Conditions.ContainsKey(conditionType))
         {
             ConditionIndicators[conditionType].SetActive(true);
+            conditionsInTent[conditionType].SetActive(true);
             ConditionTimers[conditionType].text = "" + PlayerStatus.Instance.Conditions[conditionType];
             if (conditionType == PlayerStatus.CONDITION_ILLUSORY)
                 playerIllusory.SetBool("IsIllusory", true);
         }
-        else 
+        else
         {
+            conditionsInTent[conditionType].SetActive(false);
             ConditionIndicators[conditionType].SetActive(false);
             if (conditionType == PlayerStatus.CONDITION_ILLUSORY)
                 playerIllusory.SetBool("IsIllusory", false);
@@ -219,7 +244,10 @@ public class DungeonManager : MonoBehaviour
         }
         else if (info.Contains('M'))
         {
+            Inventory.Instance.refreshCooldown();
             GlobalStates.tutorialFinished();
+            Inventory.Instance.ItemRemoved -= checkAvaiabilityChestPopUpButtons;
+            sceneOver?.Invoke(this, 0);
             SceneManager.LoadScene("MainCity");
         }
         else if (info.Contains('f')) 
@@ -243,8 +271,19 @@ public class DungeonManager : MonoBehaviour
     private TextMeshProUGUI popMessage;
     [SerializeField]
     private GameObject TentInfo;
+    [SerializeField]
+    private GameObject DetailPop;
+    [SerializeField]
+    private TextMeshProUGUI detailMessage;
 
-    private void popUp(string pm) {
+    public void popDetailUp(string pm) 
+    {
+        UI.SetActive(true);
+        DetailPop.SetActive(true);
+        detailMessage.text = pm;
+    }
+
+    public void popUp(string pm) {
         UI.SetActive(true);
         PopUp.SetActive(true);
         if (pm != null)
@@ -270,7 +309,7 @@ public class DungeonManager : MonoBehaviour
                      GlobalStates.CurrentStage * 100 + 80);
                 popUp("Found some gold!\n" +
                     "CurrentGold " + PlayerStatus.Instance.getStatus(PlayerStatus.GOLD) +
-                    " => " + (PlayerStatus.Instance.getStatus(PlayerStatus.GOLD) + goldGain));
+                    " => " + (int.Parse(PlayerStatus.Instance.getStatus(PlayerStatus.GOLD)) + goldGain));
                 PlayerStatus.Instance.bonusChestGold(goldGain);
                 loadPlayerStats();
                 bonusType = NOTHING;

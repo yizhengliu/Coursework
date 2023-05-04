@@ -144,14 +144,15 @@ public class SpriteHolder : MonoBehaviour
     public const int SUPER_STICK = 0;
     public const int VERY_SHORT_BLADE = 1;
     public const int HIGH_SPEED_WHIP = 2;
-    public const int HUMAN_SHIELD = 9;
-    public const int SMALL_SHIELD = 10;
     public const int MAGIC_SWORD = 3;
     public const int TH108= 4;
     public const int LONG_SWORD = 5;
     public const int HAMMER = 6;
     public const int SUPER_SWORD = 7;
     public const int QUATRA_SWORD = 8;
+    public const int HUMAN_SHIELD = 9;
+    public const int SMALL_SHIELD = 10;
+    public const int LAINHARUT = 11;
 
     //public const int SuperStick = 0;
     //public const int SuperStick = 0;
