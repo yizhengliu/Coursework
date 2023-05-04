@@ -7,6 +7,8 @@ public class ChipColor : MonoBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI info;
+    [SerializeField]
+    private TextMeshProUGUI type;
     private Image chip;
     private Color ATK = new Color(255f / 255f, 198f / 255f, 175f / 255f);
     private Color DEF = new Color(130f / 255f, 146f / 255f, 255f / 255f);
@@ -20,6 +22,7 @@ public class ChipColor : MonoBehaviour
     public void changeATKDEFColor(int bhv)
     {
         chip.color = bhv > 0 ? ATK : DEF;
+        type.text = bhv > 0 ? "Attack" : "Defence";
         info.text = ATKDEFLvl(bhv);
     }
     public void changeImmueColor(int imu)

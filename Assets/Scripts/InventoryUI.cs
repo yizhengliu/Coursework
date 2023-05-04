@@ -251,7 +251,6 @@ public class InventoryUI : MonoBehaviour
     private void setAttributesProperty(int index,int chipFrameIndex, bool isCooldown, bool isInteractable) 
     {
         chips[index].sprite = SpriteHolder.Instance.getItemChipFrame(chipFrameIndex);
-        Debug.Log(index);
         if(cooldowns[index] != null)
             cooldowns[index]?.gameObject.SetActive(isCooldown);
 

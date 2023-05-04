@@ -14,11 +14,9 @@ public class Inventory : MonoBehaviour
 
     private List<IInventoryItem> closet = new List<IInventoryItem>();
     private int currentPage = 0;
-    private int pageLimit = 1;
 
     public List<IInventoryItem> Closet { get { return closet; } }
     public int CurrentPage { get { return currentPage; } }
-    public int PageLimit { get { return pageLimit; } }
     public int ItemLimit { get { return itemLimit; } }
     public List<IInventoryItem> Items { get { return items; } }
    
@@ -63,6 +61,23 @@ public class Inventory : MonoBehaviour
         //Sets this to not be destroyed when reloading scene
         DontDestroyOnLoad(gameObject);
     }
+    public void load(DataToSave data) 
+    {
+        items.Clear();
+        closet.Clear();
+        foreach (int i in data.items)
+            addItem(i);
+        foreach (int i in data.closet)
+            addItemCloset(i);
+        itemLimit = data.itemLimit;
+    }
+
+    public void reset()
+    {
+        items.Clear();
+        closet.Clear();
+        itemLimit = 5;
+    }
     public void addItem(int index)
     {
         TextAsset textAsset = Resources.Load("Battle/Weapons/" + index) as TextAsset;
@@ -79,10 +94,6 @@ public class Inventory : MonoBehaviour
         IInventoryItem item = new IInventoryItem(itemAttributes, index);
         closet.Add(item);
         ItemAdded?.Invoke(this, null);
-    }
-    public void useItem(int indexCount)
-    {
-        //ItemUsed?.Invoke(this, new InventoryEventArgs(item));
     }
     public void removeItem(IInventoryItem item)
     {

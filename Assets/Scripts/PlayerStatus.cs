@@ -101,6 +101,26 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
+    public void load(DataToSave data)
+    {
+        currentHP = maxHP = data.playerMaxHP;
+        exp = data.playerExp;
+        level = data.playerLevel;
+        gold = data.playerGold;
+        luck = data.playerLuck;
+        abilities = data.playerAbilities;
+    }
+    public void reset()
+    {
+        currentHP = 120;
+        maxHP = 120;
+        level = 1;
+        exp = 0;
+        gold = 0;
+        luck = 2;
+        abilities.Clear();
+        conditions.Clear();
+    }
     public void restInInn() 
     {
         currentHP = maxHP;

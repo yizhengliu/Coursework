@@ -19,7 +19,8 @@ public class EnabledChecking : MonoBehaviour
     {
         if (isNext)
         {
-            if (Inventory.Instance.CurrentPage == Inventory.Instance.PageLimit - 1)
+            if (Inventory.Instance.CurrentPage == 
+                (Inventory.Instance.ItemLimit / Inventory.ITEMS_PER_PAGE) - 1)
                 pageChanger.interactable = false;
             else
                 pageChanger.interactable = true;

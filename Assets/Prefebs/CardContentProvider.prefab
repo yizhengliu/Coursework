@@ -92,6 +92,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: aea245d91983edc499d6547c73c91d94, type: 3}
   - {fileID: -998931121, guid: 5b82b28b6ab56144ba5b5f6d88581cfd, type: 3}
   - {fileID: 395856830, guid: 5b82b28b6ab56144ba5b5f6d88581cfd, type: 3}
+  - {fileID: 21300000, guid: 12a269483dec11d4bbc41074512ca447, type: 3}
+  - {fileID: 21300000, guid: 2216a8018c49a0c4c8f070dd79e6d8bb, type: 3}
   itemChipFrame:
   - {fileID: 21300000, guid: 05fe4d05c81bfe04380c40b342ee134c, type: 3}
   - {fileID: 21300000, guid: 23a7fdfacf8f3d248b0dd89c4ffd1603, type: 3}

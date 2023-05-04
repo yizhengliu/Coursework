@@ -43,4 +43,20 @@ public static class GlobalStates
             return;
         numOfBattle++;
     }
+    public static void load(DataToSave data) 
+    {
+        numOfBattle = 2;
+        isClosetChecked = data.isClosetChecked;
+        stageExplored = data.stageExplored;
+        isNewGame = false;
+        isfirstTimeDungeon = false;
+    }
+    public static void reset() 
+    {
+        numOfBattle = 0;
+        isClosetChecked = false;
+        stageExplored = 0;
+        isNewGame = true;
+        isfirstTimeDungeon = true;
+    }
 }

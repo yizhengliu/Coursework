@@ -248,6 +248,7 @@ public class DungeonManager : MonoBehaviour
             GlobalStates.tutorialFinished();
             Inventory.Instance.ItemRemoved -= checkAvaiabilityChestPopUpButtons;
             sceneOver?.Invoke(this, 0);
+            JSONSaving.Instance.SaveGame();
             SceneManager.LoadScene("MainCity");
         }
         else if (info.Contains('f')) 
@@ -257,7 +258,7 @@ public class DungeonManager : MonoBehaviour
     }
     private string randomRoll(string info) {
         int from = info.IndexOf('(') + 1;
-        int to = info.IndexOf(')');
+        int to = info.LastIndexOf(')');
 
         string[] possibleInfos = info.Substring(from, to - from).Split(',');
         return possibleInfos[UnityEngine.Random

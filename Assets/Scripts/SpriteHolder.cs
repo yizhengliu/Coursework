@@ -154,6 +154,9 @@ public class SpriteHolder : MonoBehaviour
     public const int SMALL_SHIELD = 10;
     public const int LAINHARUT = 11;
 
+    public const int PRINCE_SWORD = 12;
+    public const int RANCEWOD = 13;
+
     //public const int SuperStick = 0;
     //public const int SuperStick = 0;
     //public const int SuperStick = 0;
