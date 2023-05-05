@@ -274,5 +274,9 @@ public class PlayerStatus : MonoBehaviour
     {
         abilities.Add(type);
     }
+    public void buyItem(int itemValue) 
+    {
+        gold -= itemValue;
+    }
 
 }

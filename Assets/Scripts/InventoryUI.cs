@@ -111,11 +111,11 @@ public class InventoryUI : MonoBehaviour
             {
                 //if the item is current already
                 if (temp[i].CurrentCooldown == 0)
-                    setAttributesProperty(i, SpriteHolder.OCCUPIED_MULTI_TIME_ALREADY, false, true);
+                    setAttributesProperty(i, SpriteHolder.OCCUPIED_MULTI_TIME_ALREADY, false, true, true);
                 //if the item is on cooldown
                 else
                 {
-                    setAttributesProperty(i, SpriteHolder.OCCUPIED_MULTI_TIME_ALREADY, true, false);
+                    setAttributesProperty(i, SpriteHolder.OCCUPIED_MULTI_TIME_ALREADY, true, false, true);
                     cooldowns[i].text = "Turn Wait " + temp[i].CurrentCooldown;
                 }
                 //set the content of the chip (the weapon sprite)
@@ -131,13 +131,13 @@ public class InventoryUI : MonoBehaviour
                     // if it is empty chip
                     if (i + (Inventory.ITEMS_PER_PAGE * Inventory.Instance.CurrentPage)
                         < Inventory.Instance.ItemLimit)
-                        setAttributesProperty(i, SpriteHolder.NO_ITEM_SQUARE, false, false);
+                        setAttributesProperty(i, SpriteHolder.NO_ITEM_SQUARE, false, false, false);
                     //if it is unavailable
                     else
-                        setAttributesProperty(i, SpriteHolder.UNAVAILABLE, false, false);
+                        setAttributesProperty(i, SpriteHolder.UNAVAILABLE, false, false, false);
                 }
                 else 
-                    setAttributesProperty(i, SpriteHolder.NO_ITEM_SQUARE, false, false);
+                    setAttributesProperty(i, SpriteHolder.NO_ITEM_SQUARE, false, false, false);
             }
         }
     }
@@ -250,15 +250,12 @@ public class InventoryUI : MonoBehaviour
         tentClosed();
     }
 
-    private void setAttributesProperty(int index,int chipFrameIndex, bool isCooldown, bool isInteractable) 
+    private void setAttributesProperty(int index,int chipFrameIndex, bool isCooldown, bool isInteractable, bool isVisiable) 
     {
         chips[index].sprite = SpriteHolder.Instance.getItemChipFrame(chipFrameIndex);
-        if(cooldowns[index] != null)
-            cooldowns[index]?.gameObject.SetActive(isCooldown);
-
-        if (buttons[index] != null)
-            buttons[index].interactable = isInteractable;
-        contents[index]?.gameObject.SetActive(isInteractable);
+        cooldowns[index]?.gameObject.SetActive(isCooldown);
+        buttons[index].interactable = isInteractable;
+        contents[index]?.gameObject.SetActive(isVisiable);
     }
 
     public void battleSeletAll() 

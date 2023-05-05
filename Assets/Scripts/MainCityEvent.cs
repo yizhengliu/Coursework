@@ -239,9 +239,11 @@ public class MainCityEvent : MonoBehaviour
     public void buyItem() 
     {
         Inventory.Instance.addItem(tempBonusItem.getProperty(IInventoryItem.INDEX));
+        PlayerStatus.Instance.buyItem(tempBonusItem.getProperty(IInventoryItem.VALUE));
     }
     public void buyItemToCloset() 
     {
         Inventory.Instance.addItemCloset(tempBonusItem.getProperty(IInventoryItem.INDEX));
+        PlayerStatus.Instance.buyItem(tempBonusItem.getProperty(IInventoryItem.VALUE));
     }
 }

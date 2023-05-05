@@ -105,6 +105,7 @@ public class Inventory : MonoBehaviour
     {
         foreach (IInventoryItem item in items)
             item.resetCooldown();
+        ItemUsed?.Invoke(this, null);
     }
 
     public int getSelectedItemsATK(bool[] selectedChips) 
