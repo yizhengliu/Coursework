@@ -119,6 +119,11 @@ public class BattleSystem : MonoBehaviour
         {
             int dmg = Mathf.RoundToInt(
                 Inventory.Instance.getSelectedItemsATK(selectedChips) * critChangce * atk_ratio);
+            //if enemy defence
+            if (MonsterManager.Instance.getcurrentBehaviour() < 0) 
+                dmg += MonsterManager.Instance.getcurrentBehaviour();
+            if (dmg < 0)
+                dmg = 0;
             MonsterManager.Instance.getHitByPlayer(dmg);
             RoundInfo.text = "You have dealt " + dmg + " damage.\n";
         }
@@ -126,13 +131,15 @@ public class BattleSystem : MonoBehaviour
             RoundInfo.text = "Enemy blocked your attack due to the immue type.\n";
 
         //player get hit by enemy
-        int dmgFromEnemy = Mathf.RoundToInt(
-            MonsterManager.Instance.getcurrentBehaviour() * def_ratio);
-        if (PlayerStatus.Instance.dmgedByMonster(dmgFromEnemy) <= 0)
-            SceneManager.LoadScene("GameOver");
-
-        if (dmgFromEnemy != 0)
-            RoundInfo.text += "Enemy have dealt " + dmgFromEnemy +" to you.\n";
+        if (MonsterManager.Instance.getcurrentBehaviour() > 0)
+        {
+            int dmgFromEnemy = Mathf.RoundToInt(
+                MonsterManager.Instance.getcurrentBehaviour() * def_ratio);
+            if (PlayerStatus.Instance.dmgedByMonster(dmgFromEnemy) <= 0)
+                SceneManager.LoadScene("GameOver");
+            if (dmgFromEnemy != 0)
+                RoundInfo.text += "Enemy have dealt " + dmgFromEnemy + " to you.\n";
+        }
 
         //if monster had buff, add it to the player
         addBuff(Monster.DEBUFF_ATK_DOWN);
@@ -151,7 +158,7 @@ public class BattleSystem : MonoBehaviour
             if (MonsterManager.Instance.isDead())
             {
 
-                battleEnd?.Invoke(this, null);
+                battleEnd?.Invoke(this, -1);
                 StartCoroutine(enemyDead());
             }
             else
@@ -231,6 +238,7 @@ public class BattleSystem : MonoBehaviour
     public void changeScene() {
         if (isFlee)
         {
+            battleEnd?.Invoke(this, -1);
             PlayerStatus.Instance.flee();
             SceneManager.LoadScene("MainCity");
         }
@@ -263,6 +271,6 @@ public class BattleSystem : MonoBehaviour
         else
             selectedChips[indexInArray] = true;
     }
-    public static event EventHandler<InventoryEventArgs> battleEnd;
+    public static event EventHandler<int> battleEnd;
     public static event EventHandler<InventoryEventArgs> battleStarted;
 }

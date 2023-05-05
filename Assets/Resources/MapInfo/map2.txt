@@ -1,5 +1,5 @@
 e m8 d23 e x
-e m9 e e c(g,12)
+e m9 e e c(g_12)
 e e e r(m9,d21,e) m9
 e x e x e
 m9 x r(m9,d21,e) e e

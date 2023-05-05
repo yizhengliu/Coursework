@@ -21,14 +21,15 @@ public class ChipColor : MonoBehaviour
     }
     public void changeATKDEFColor(int bhv)
     {
+        Debug.Log(bhv);
         chip.color = bhv > 0 ? ATK : DEF;
-        type.text = bhv > 0 ? "Attack" : "Defence";
-        info.text = ATKDEFLvl(bhv);
+        info.text = bhv > 0 ? "Attack" : "Defence";
+        type.text = ATKDEFLvl(bhv);
     }
     public void changeImmueColor(int imu)
     {
         chip.color = imu == Monster.IMMUE_PHYSICAL ? PHY_IMMUE : MAG_IMMUE;
-        info.text = imu == Monster.IMMUE_PHYSICAL ? "PHY" : "MAG";
+        type.text = imu == Monster.IMMUE_PHYSICAL ? "PHY" : "MAG";
     }
     private string ATKDEFLvl(int value) {
         int absoluteValue = Mathf.Abs(value);

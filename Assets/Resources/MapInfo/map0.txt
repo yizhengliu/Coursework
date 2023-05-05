@@ -8,9 +8,9 @@ x x e e x
 x e b20 x x
 x m4 x x x
 x b20 x x x
-x c(0) c(g,0) x x 
+x c(0) c(g_0) x x 
 x m5 m4 e x
 x b20 e x x
-x e c(g,0) x x
+x e c(g_0) x x
 x m14 x x x
 x M x x x

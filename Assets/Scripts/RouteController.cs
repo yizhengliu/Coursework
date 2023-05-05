@@ -22,7 +22,7 @@ public class RouteController : MonoBehaviour
         dungeonManager.mapReaded += show;
         dungeonManager.newAreaMoved += GoToNextRoute;
         dungeonManager.randomRouteEntered += flipCard;
-        dungeonManager.sceneOver += unreg;
+        DungeonManager.sceneOver += unreg;
         //bind show with mapreaded function
         routeBackground = GetComponent<Image>();
         goToNext = GetComponent<Button>();
@@ -33,7 +33,7 @@ public class RouteController : MonoBehaviour
         dungeonManager.mapReaded -= show;
         dungeonManager.newAreaMoved -= GoToNextRoute;
         dungeonManager.randomRouteEntered -= flipCard;
-        dungeonManager.sceneOver -= unreg;
+        DungeonManager.sceneOver -= unreg;
     }
 
     private void show(object sender, NextAreaInfoArgs args)
@@ -104,7 +104,6 @@ public class RouteController : MonoBehaviour
         if (area != 0 || route % 10 != currentRoute)
             return;
         StartCoroutine(cardFlipAnimation(args[1]));
-        Debug.Log(info + " " + pos);
         
     }
 
@@ -117,6 +116,7 @@ public class RouteController : MonoBehaviour
             yield return null;
         }
         this.info = info;
+        Debug.Log(info + " " + pos);
         LoadInfo();
         transform.localScale = new Vector3(1, 1, 1);
         yield return new WaitForSeconds(0.3f);

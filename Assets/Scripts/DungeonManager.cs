@@ -17,7 +17,7 @@ public class DungeonManager : MonoBehaviour
     // public event EventHandler<string[]> mapReaded;
     public event EventHandler<NextAreaInfoArgs> newAreaMoved;
 
-    public event EventHandler<int> sceneOver;
+    public static event EventHandler<int> sceneOver;
     public event EventHandler<int> newAreaButtonPressed;
     public event EventHandler<string[]> randomRouteEntered;
     [SerializeField]
@@ -67,8 +67,13 @@ public class DungeonManager : MonoBehaviour
         TentInfo.SetActive(GlobalStates.IsFirstTimeDungeon);
     }
 
-    private void onClickBackToCity() 
+    public void onClickBackToCity() 
     {
+        Inventory.Instance.refreshCooldown();
+        GlobalStates.tutorialFinished();
+        Inventory.Instance.ItemRemoved -= checkAvaiabilityChestPopUpButtons;
+        sceneOver?.Invoke(this, 0);
+        JSONSaving.Instance.SaveGame();
         SceneManager.LoadScene("MainCity");
     }
 
@@ -160,7 +165,7 @@ public class DungeonManager : MonoBehaviour
         string info = mapInfos[currentArea].Split(' ')[currentRoute];
         if (info.Contains('r'))
         {
-            info = randomRoll(info);
+            info = randomRoll(info, false);
             randomRouteEntered?.Invoke(this,
                 new string[] { "" + currentRoute,
                 info});
@@ -191,7 +196,7 @@ public class DungeonManager : MonoBehaviour
         else if (info.Contains('c'))
         {
             //chest!! 
-            string bonus = randomRoll(info);
+            string bonus = randomRoll(info, true);
             if (bonus != "g")
             {
                 index = int.Parse(bonus);
@@ -256,11 +261,19 @@ public class DungeonManager : MonoBehaviour
             SceneManager.LoadScene("FIN");
         }
     }
-    private string randomRoll(string info) {
-        int from = info.IndexOf('(') + 1;
-        int to = info.LastIndexOf(')');
-
-        string[] possibleInfos = info.Substring(from, to - from).Split(',');
+    private string randomRoll(string info, bool isChest) {
+        int from = info.IndexOf('(') + 1; 
+        int to;
+        if (isChest)
+            to = info.LastIndexOf(')');
+        else
+            to = info.IndexOf(')');
+        Debug.Log(to); 
+        string[] possibleInfos;
+        if (isChest)
+            possibleInfos = info.Substring(from, to - from).Split('_');
+        else
+            possibleInfos = info.Substring(from, to - from).Split(',');
         return possibleInfos[UnityEngine.Random
             .Range(0, possibleInfos.Length)];
     }

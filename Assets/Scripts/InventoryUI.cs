@@ -40,6 +40,8 @@ public class InventoryUI : MonoBehaviour
     private void Awake()
     {
         //needs to unsub normal case
+        if(type == TENT || type == DUNGEON)
+            DungeonManager.sceneOver += unsubEvents;
         Inventory.Instance.ItemAdded += refreshUI;
         Inventory.Instance.ItemRemoved += refreshUI;
         if (type == BATTLE)
@@ -304,7 +306,7 @@ public class InventoryUI : MonoBehaviour
                 chips[start].color = Color.white;
     }
 
-    public void unsubEvents(object sender, InventoryEventArgs args) 
+    public void unsubEvents(object sender, int args) 
     {
         Inventory.Instance.ItemAdded -= refreshUI;
         Inventory.Instance.ItemRemoved -= refreshUI;
@@ -317,4 +319,8 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    public void unsub() 
+    {
+        unsubEvents(null, -1);
+    }
 }

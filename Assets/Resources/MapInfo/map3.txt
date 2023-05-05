@@ -3,6 +3,6 @@ e x r(m10,g,e) e x
 e m11 e m10 m11
 x b19 e e r(m11,g,e)
 M e d21 e x
-e m10 c(g,5) x m17
+e m10 c(g_5) x m17
 x e m11 e x
 e b19 e d21 x
