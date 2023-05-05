@@ -32,6 +32,8 @@ public class InventoryUI : MonoBehaviour
     private Button discard;
     [SerializeField]
     private Button transfer;
+
+    private Color transparentColor = new Color(0, 0, 0, 0);
     private Color selectedColor = new Color(59f / 255f, 159f / 255f, 255f / 255f);
     [SerializeField]
     private int type;
@@ -43,7 +45,6 @@ public class InventoryUI : MonoBehaviour
             DungeonManager.sceneOver += unsubEvents;
         Inventory.Instance.ItemAdded += refreshUI;
         Inventory.Instance.ItemRemoved += refreshUI;
-        Inventory.Instance.ItemUsed += refreshUI;
         if (type == BATTLE)
         {
             Inventory.Instance.ItemUsed += refreshUI;
@@ -111,11 +112,13 @@ public class InventoryUI : MonoBehaviour
             {
                 //if the item is current already
                 if (temp[i].CurrentCooldown == 0)
-                    setAttributesProperty(i, SpriteHolder.OCCUPIED_MULTI_TIME_ALREADY, false, true, true);
-                //if the item is on cooldown
+                {
+                    setAttributesProperty(i, SpriteHolder.OCCUPIED_MULTI_TIME_ALREADY, true, true);
+                    cooldowns[i].text = "";
+                }//if the item is on cooldown
                 else
                 {
-                    setAttributesProperty(i, SpriteHolder.OCCUPIED_MULTI_TIME_ALREADY, true, false, true);
+                    setAttributesProperty(i, SpriteHolder.OCCUPIED_MULTI_TIME_ALREADY, false, true);
                     cooldowns[i].text = "Turn Wait " + temp[i].CurrentCooldown;
                 }
                 //set the content of the chip (the weapon sprite)
@@ -131,17 +134,24 @@ public class InventoryUI : MonoBehaviour
                     // if it is empty chip
                     if (i + (Inventory.ITEMS_PER_PAGE * Inventory.Instance.CurrentPage)
                         < Inventory.Instance.ItemLimit)
-                        setAttributesProperty(i, SpriteHolder.NO_ITEM_SQUARE, false, false, false);
+                        setAttributesProperty(i, SpriteHolder.NO_ITEM_SQUARE, false, false);
                     //if it is unavailable
                     else
-                        setAttributesProperty(i, SpriteHolder.UNAVAILABLE, false, false, false);
+                        setAttributesProperty(i, SpriteHolder.UNAVAILABLE, false, false);
                 }
                 else 
-                    setAttributesProperty(i, SpriteHolder.NO_ITEM_SQUARE, false, false, false);
+                    setAttributesProperty(i, SpriteHolder.NO_ITEM_SQUARE, false, false);
             }
         }
     }
-
+    private void setAttributesProperty(int index, int chipFrameIndex, bool isInteractable, bool isVisiable)
+    {
+        chips[index].sprite = SpriteHolder.Instance.getItemChipFrame(chipFrameIndex);
+        if(buttons[index] != null)
+            buttons[index].interactable = isInteractable;
+        //contents[index]?.gameObject.SetActive(isVisiable);
+        contents[index].color = isVisiable ? Color.white : transparentColor;
+    }
     public void tentPageChanged()
     {
         if (lastSelectedItem == -1)
@@ -250,13 +260,7 @@ public class InventoryUI : MonoBehaviour
         tentClosed();
     }
 
-    private void setAttributesProperty(int index,int chipFrameIndex, bool isCooldown, bool isInteractable, bool isVisiable) 
-    {
-        chips[index].sprite = SpriteHolder.Instance.getItemChipFrame(chipFrameIndex);
-        cooldowns[index]?.gameObject.SetActive(isCooldown);
-        buttons[index].interactable = isInteractable;
-        contents[index]?.gameObject.SetActive(isVisiable);
-    }
+    
 
     public void battleSeletAll() 
     {
@@ -307,14 +311,13 @@ public class InventoryUI : MonoBehaviour
     {
         Inventory.Instance.ItemAdded -= refreshUI;
         Inventory.Instance.ItemRemoved -= refreshUI;
-        Inventory.Instance.ItemUsed -= refreshUI;
         if (type == BATTLE)
         {
             Inventory.Instance.ItemUsed -= refreshUI;
             BattleSystem.battleStarted -= refreshUI;
             BattleSystem.battleStarted -= unselect;
-            BattleSystem.battleEnd -= unsubEvents;
         }
+        BattleSystem.battleEnd -= unsubEvents;
     }
 
     public void unsub() 
