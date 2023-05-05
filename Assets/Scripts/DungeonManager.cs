@@ -148,10 +148,7 @@ public class DungeonManager : MonoBehaviour
         updateConditions();
         StartCoroutine(updateUserStates(counter - 3, pos));
         Debug.Log("Corotine should have finished");
-        loadPlayerStats();
-        checkPlayerHP();
-        if (int.Parse(PlayerStatus.Instance.getStatus(PlayerStatus.CURRENT_HP)) <= 0)
-            SceneManager.LoadScene("GameOver");
+       
     }
     private void checkPlayerHP() {
         if (int.Parse(PlayerStatus.Instance.getStatus(PlayerStatus.CURRENT_HP)) <
@@ -162,7 +159,7 @@ public class DungeonManager : MonoBehaviour
     }
     IEnumerator updateUserStates(int currentArea, int currentRoute) 
     {
-        if (PlayerStatus.Instance.Conditions.ContainsKey(PlayerStatus.CONDITION_ILLUSORY))
+        if (PlayerStatus.Instance.Conditions.ContainsKey(PlayerStatus.CONDITION_POISON))
         {
             yield return new WaitUntil(() => isPosionWindowShowed);
             isPosionWindowShowed = false;
@@ -182,14 +179,22 @@ public class DungeonManager : MonoBehaviour
         caseCheck(info);
         newAreaButtonPressed?.Invoke(this, currentRoute);
         newAreaMoved?.Invoke(this, new NextAreaInfoArgs(currentArea, mapInfos));
-        Debug.Log("Corotine finished");
+        loadPlayerStats();
+        checkPlayerHP();
+        if (int.Parse(PlayerStatus.Instance.getStatus(PlayerStatus.CURRENT_HP)) <= 0)
+            SceneManager.LoadScene("GameOver");
         yield return null;
     }
 
-    public void animationFinished() {
+    public void animationFinished() 
+    {
         isAnimationFinished = true;
     }
 
+    public void poisonFinished() 
+    {
+        isPosionWindowShowed = true;   
+    }
 
     private void caseCheck(string info)
     {
