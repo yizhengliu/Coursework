@@ -80,13 +80,19 @@ public class BattleSystem : MonoBehaviour
         if (currentBhv == 0)
             ATK_DEFChip.SetActive(false);
         else
+        {
+            ATK_DEFChip.SetActive(true);
             ATK_DEFChip.SendMessage("changeATKDEFColor", currentBhv);
+        }
         //get Immue info
         MonsterManager.Instance.refreshImmueInfo();
         if (MonsterManager.Instance.TempImmue == Monster.IMMUE_NOTHING)
             ImmueChip.SetActive(false);
         else
+        {
+            ImmueChip.SetActive(true);
             ImmueChip.SendMessage("changeImmueColor", MonsterManager.Instance.TempImmue);
+        }
     }
 
     public void onClickBattleStart() {

@@ -335,6 +335,7 @@ public class DungeonManager : MonoBehaviour
 
     public static void newDungeon() {
         counter = 2;
+        currentPos = 2;
     }
 
     public void tentClosed() { GlobalStates.firstTimeCloseTent(); }

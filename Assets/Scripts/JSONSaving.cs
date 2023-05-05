@@ -78,5 +78,6 @@ public class JSONSaving : MonoBehaviour
         PlayerStatus.Instance.reset();
         GlobalStates.reset();
         Inventory.Instance.reset();
+        DungeonManager.newDungeon();
     }
 }

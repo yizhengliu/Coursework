@@ -39,11 +39,11 @@ public class InventoryUI : MonoBehaviour
 
     private void Awake()
     {
-        //needs to unsub normal case
         if(type == TENT || type == DUNGEON)
             DungeonManager.sceneOver += unsubEvents;
         Inventory.Instance.ItemAdded += refreshUI;
         Inventory.Instance.ItemRemoved += refreshUI;
+        Inventory.Instance.ItemUsed += refreshUI;
         if (type == BATTLE)
         {
             Inventory.Instance.ItemUsed += refreshUI;
@@ -243,8 +243,8 @@ public class InventoryUI : MonoBehaviour
 
     public void discardItem()
     {
-        if (type == CLOSET) 
-            Inventory.Instance.Closet.Remove(Inventory.Instance.Closet[lastSelectedItem]);
+        if (type == CLOSET)
+            Inventory.Instance.discardItemCloset(lastSelectedItem);
         else
             Inventory.Instance.removeItem(Inventory.Instance.getCurrentPageItems()[lastSelectedItem]);
         tentClosed();
@@ -307,6 +307,7 @@ public class InventoryUI : MonoBehaviour
     {
         Inventory.Instance.ItemAdded -= refreshUI;
         Inventory.Instance.ItemRemoved -= refreshUI;
+        Inventory.Instance.ItemUsed -= refreshUI;
         if (type == BATTLE)
         {
             Inventory.Instance.ItemUsed -= refreshUI;

@@ -71,7 +71,11 @@ public class Inventory : MonoBehaviour
             addItemCloset(i);
         itemLimit = data.itemLimit;
     }
-
+    public void discardItemCloset(int itemIndex) 
+    {
+        closet.Remove(closet[itemIndex]);
+        ItemRemoved?.Invoke(this, null);
+    }
     public void reset()
     {
         items.Clear();
