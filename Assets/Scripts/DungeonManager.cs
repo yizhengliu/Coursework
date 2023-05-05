@@ -136,18 +136,29 @@ public class DungeonManager : MonoBehaviour
         if (PlayerStatus.Instance.updateStatesInDungeon())
             popUp(null);
     }
-    public void MoveToNextArea(int pos) {
+    public void MoveToNextArea(int pos)
+    {
+        isPosionWindowShowed = false;
         int leftLimit = currentPos - 1 < 0 ? 0 : currentPos - 1;
         int rightLimit = currentPos + 1 > 4 ? 4 : currentPos + 1;
         if (PlayerStatus.Instance.Conditions.ContainsKey(PlayerStatus.CONDITION_ILLUSORY))
-            pos = UnityEngine.Random.Range(leftLimit, rightLimit + 1);
+        {
+            Debug.Log("im illusory");
+            int currentArea = counter - 3;
+            if (currentArea < 0)
+                currentArea += mapInfos.Length;
+            string info = mapInfos[currentArea].Split(' ')[pos];
+            do
+            {
+                pos = UnityEngine.Random.Range(leftLimit, rightLimit + 1);
+            }
+            while (info.Contains('x'));
+        }
         currentPos = pos;
-
         if (++counter == mapInfos.Length)
             counter = 0;
         updateConditions();
         StartCoroutine(updateUserStates(counter - 3, pos));
-        Debug.Log("Corotine should have finished");
        
     }
     private void checkPlayerHP() {
@@ -161,9 +172,11 @@ public class DungeonManager : MonoBehaviour
     {
         if (PlayerStatus.Instance.Conditions.ContainsKey(PlayerStatus.CONDITION_POISON))
         {
-            yield return new WaitUntil(() => isPosionWindowShowed);
+            Debug.Log("Inside checking");
+            yield return new WaitWhile(() => !isPosionWindowShowed);
             isPosionWindowShowed = false;
         }
+        Debug.Log("Checked poison");
         if (currentArea < 0)
             currentArea += mapInfos.Length;
         string info = mapInfos[currentArea].Split(' ')[currentRoute];
@@ -173,7 +186,7 @@ public class DungeonManager : MonoBehaviour
             randomRouteEntered?.Invoke(this,
                 new string[] { "" + currentRoute,
                 info});
-            yield return new WaitUntil(()=>isAnimationFinished);
+            yield return new WaitWhile(()=>!isAnimationFinished);
             isAnimationFinished = false;
         }
         caseCheck(info);
@@ -278,7 +291,7 @@ public class DungeonManager : MonoBehaviour
     private string randomRoll(string info, bool isChest) {
         int from = info.IndexOf('(') + 1; 
         int to;
-        if (isChest)
+        if (!isChest)
             to = info.LastIndexOf(')');
         else
             to = info.IndexOf(')');

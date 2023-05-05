@@ -114,20 +114,22 @@ public class BattleSystem : MonoBehaviour
         }
 
         //if type is right
-        if (!(MonsterManager.Instance.TempImmue ==
-            Inventory.Instance.isSelectedItemsPHY(selectedChips)))
+        if (MonsterManager.Instance.TempImmue == Monster.IMMUE_NOTHING
+            || ((!(MonsterManager.Instance.TempImmue == Monster.IMMUE_NOTHING))
+            && !(MonsterManager.Instance.TempImmue ==
+            Inventory.Instance.isSelectedItemsPHY(selectedChips))))
         {
             int dmg = Mathf.RoundToInt(
                 Inventory.Instance.getSelectedItemsATK(selectedChips) * critChangce * atk_ratio);
             //if enemy defence
-            if (MonsterManager.Instance.getcurrentBehaviour() < 0) 
+            if (MonsterManager.Instance.getcurrentBehaviour() < 0)
                 dmg += MonsterManager.Instance.getcurrentBehaviour();
             if (dmg < 0)
                 dmg = 0;
             MonsterManager.Instance.getHitByPlayer(dmg);
             RoundInfo.text = "You have dealt " + dmg + " damage.\n";
         }
-        else 
+        else
             RoundInfo.text = "Enemy blocked your attack due to the immue type.\n";
 
         //player get hit by enemy
@@ -136,7 +138,10 @@ public class BattleSystem : MonoBehaviour
             int dmgFromEnemy = Mathf.RoundToInt(
                 MonsterManager.Instance.getcurrentBehaviour() * def_ratio);
             if (PlayerStatus.Instance.dmgedByMonster(dmgFromEnemy) <= 0)
+            {
+                battleEnd?.Invoke(this, -1);
                 SceneManager.LoadScene("GameOver");
+            }
             if (dmgFromEnemy != 0)
                 RoundInfo.text += "Enemy have dealt " + dmgFromEnemy + " to you.\n";
         }
@@ -157,7 +162,6 @@ public class BattleSystem : MonoBehaviour
         {
             if (MonsterManager.Instance.isDead())
             {
-
                 battleEnd?.Invoke(this, -1);
                 StartCoroutine(enemyDead());
             }
@@ -253,7 +257,8 @@ public class BattleSystem : MonoBehaviour
     public void onClickSelectAll()
     {
         for (int i = 0; i < selectedChips.Length; i++)
-            selectedChips[i] = true;
+            if (Inventory.Instance.Items[i].CurrentCooldown == 0)
+                selectedChips[i] = true;
     }
 
     public void onClickUnSelectAll()
