@@ -50,6 +50,7 @@ public class DungeonManager : MonoBehaviour
     private const int ITEM = 2;
     private IInventoryItem tempBonusItem;
     private int bonusType = NOTHING;
+    private bool isPosionWindowShowed = false;
     private void Awake()
     {
         Inventory.Instance.ItemRemoved += checkAvaiabilityChestPopUpButtons;
@@ -146,6 +147,7 @@ public class DungeonManager : MonoBehaviour
             counter = 0;
         updateConditions();
         StartCoroutine(updateUserStates(counter - 3, pos));
+        Debug.Log("Corotine should have finished");
         loadPlayerStats();
         checkPlayerHP();
         if (int.Parse(PlayerStatus.Instance.getStatus(PlayerStatus.CURRENT_HP)) <= 0)
@@ -160,6 +162,11 @@ public class DungeonManager : MonoBehaviour
     }
     IEnumerator updateUserStates(int currentArea, int currentRoute) 
     {
+        if (PlayerStatus.Instance.Conditions.ContainsKey(PlayerStatus.CONDITION_ILLUSORY))
+        {
+            yield return new WaitUntil(() => isPosionWindowShowed);
+            isPosionWindowShowed = false;
+        }
         if (currentArea < 0)
             currentArea += mapInfos.Length;
         string info = mapInfos[currentArea].Split(' ')[currentRoute];
@@ -175,12 +182,14 @@ public class DungeonManager : MonoBehaviour
         caseCheck(info);
         newAreaButtonPressed?.Invoke(this, currentRoute);
         newAreaMoved?.Invoke(this, new NextAreaInfoArgs(currentArea, mapInfos));
+        Debug.Log("Corotine finished");
         yield return null;
     }
 
     public void animationFinished() {
         isAnimationFinished = true;
     }
+
 
     private void caseCheck(string info)
     {
