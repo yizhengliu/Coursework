@@ -410,14 +410,20 @@ public class DungeonManager : MonoBehaviour
 
     public void checkAvaiabilityChestPopUpButtons(object sender, InventoryEventArgs args) 
     {
-        if (!GlobalStates.IsClosetChecked || Inventory.Instance.Closet.Count == Inventory.CLOSET_LIMIT)
-            Closet.interactable = false;
-        else
-            Closet.interactable = true;
-        if (Inventory.Instance.isInventoryAddable())
-            Take.interactable = true;
-        else
-            Take.interactable = false;
+        if (Closet != null)
+        {
+            if (!GlobalStates.IsClosetChecked || Inventory.Instance.Closet.Count == Inventory.CLOSET_LIMIT)
+                Closet.interactable = false;
+            else
+                Closet.interactable = true;
+        }
+        if (Take != null)
+        {
+            if (Inventory.Instance.isInventoryAddable())
+                Take.interactable = true;
+            else
+                Take.interactable = false;
+        }
     }
 }
 

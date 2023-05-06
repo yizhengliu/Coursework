@@ -250,6 +250,7 @@ public class BattleSystem : MonoBehaviour
         {
             battleEnd?.Invoke(this, -1);
             PlayerStatus.Instance.flee();
+            JSONSaving.Instance.SaveGame();
             SceneManager.LoadScene("MainCity");
         }
         else
