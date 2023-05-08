@@ -149,8 +149,8 @@ public class Inventory : MonoBehaviour
         return temp;
     }
     public bool isInventoryAddable() { return items.Count < itemLimit; }
-    public void toRight() { currentPage++; ItemAdded?.Invoke(this, null); }
-    public void toLeft() { currentPage--; ItemAdded?.Invoke(this, null); }
+    public void toRight() { currentPage++;}
+    public void toLeft() { currentPage--;}
 
     public event EventHandler<InventoryEventArgs> ItemAdded;
     public event EventHandler<InventoryEventArgs> ItemRemoved;

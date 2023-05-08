@@ -68,11 +68,8 @@ public class InventoryUI : MonoBehaviour
         if(type != CLOSET)
             showIndicator();
         if (type == DUNGEON)
-        {
-            Debug.Log("yes");
             foreach (Button b in buttons)
                 b.interactable = false;
-        }
     }
 
     public void showIndicator()
@@ -131,7 +128,7 @@ public class InventoryUI : MonoBehaviour
             else
             {
                 contents[i].sprite = null;
-
+                cooldowns[i].text = "";
                 if (type != CLOSET)
                 {
                     // if it is empty chip
@@ -308,6 +305,8 @@ public class InventoryUI : MonoBehaviour
                     chips[start].color = selectedColor;
                 else
                     chips[start].color = Color.white;
+            else
+                chips[start].color = Color.white;
         /*
         for (int start = Inventory.ITEMS_PER_PAGE * Inventory.Instance.CurrentPage,
             end = start + Inventory.ITEMS_PER_PAGE; start < end; start++)

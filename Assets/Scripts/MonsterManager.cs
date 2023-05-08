@@ -81,12 +81,13 @@ public class MonsterManager : MonoBehaviour
 
     public int getCurrentHP() { return currentMonster.getHP(); }
 
-    public void loadNextLife()
-    {
+    public int loadNextLife()
+    {   
         TextAsset textAsset = Resources.Load("MapInfo/Monsters/" + currentMonsterIndex +
             "-" + currentMonster.Next) as TextAsset;
         string[] monsterAttributes = textAsset.text.Split('\n');
         currentMonster = new Monster(monsterAttributes);
+        return currentMonster.Next - 1;
     }
 
     public int getMaxHP() { return currentMonster.MaxHP; }

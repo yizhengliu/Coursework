@@ -118,15 +118,14 @@ public class BattleSystem : MonoBehaviour
             if (--battleConditions[Monster.DEBUFF_DEF_DOWN] == 0)
                 battleConditions.Remove(Monster.DEBUFF_DEF_DOWN);
         }
-
+        int dmg = Mathf.RoundToInt(
+                Inventory.Instance.getSelectedItemsATK(selectedChips) * critChangce * atk_ratio);
         //if type is right
         if (MonsterManager.Instance.TempImmue == Monster.IMMUE_NOTHING
             || ((!(MonsterManager.Instance.TempImmue == Monster.IMMUE_NOTHING))
             && !(MonsterManager.Instance.TempImmue ==
             Inventory.Instance.isSelectedItemsPHY(selectedChips))))
         {
-            int dmg = Mathf.RoundToInt(
-                Inventory.Instance.getSelectedItemsATK(selectedChips) * critChangce * atk_ratio);
             //if enemy defence
             if (MonsterManager.Instance.getcurrentBehaviour() < 0)
                 dmg += MonsterManager.Instance.getcurrentBehaviour();
@@ -172,7 +171,10 @@ public class BattleSystem : MonoBehaviour
                 StartCoroutine(enemyDead());
             }
             else
+            {
                 MonsterManager.Instance.loadNextLife();
+                RoundInfo.text += "\nEnemy revived with new status!!";
+            }
         }
 
         checkPlayerHP();
