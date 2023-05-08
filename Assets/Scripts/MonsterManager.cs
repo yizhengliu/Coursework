@@ -97,7 +97,7 @@ public class MonsterManager : MonoBehaviour
 
     public int getDebuff() 
     {
-        if (Random.Range(0, 100) < 33)
+        if (Random.Range(0, 100) < 50)
         {
             if (currentMonster.getDebuff() != Monster.DEBUFF_RANDOM)
                 return currentMonster.getDebuff();

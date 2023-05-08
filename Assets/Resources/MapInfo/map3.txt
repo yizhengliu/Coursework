@@ -1,7 +1,7 @@
 d21 e m10 d23 x
-e x r(m10,g,e) e x
+e x r(m10,c(g),e) e x
 e m11 e m10 m11
-x b19 e e r(m11,g,e)
+x b19 e e r(m11,c(g),e)
 M e d21 e x
 e m10 c(g_5) x m17
 x e m11 e x

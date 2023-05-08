@@ -16,7 +16,8 @@ public class MainCityEvent : MonoBehaviour
     [SerializeField]
     private Button[] Stages;
     private bool isAbilityGain = false;
-
+    [SerializeField]
+    private TextMeshProUGUI playerGold;
     private void Start()
     {
         PlayerStatus.Instance.DescriptionDispay = description;
@@ -240,10 +241,17 @@ public class MainCityEvent : MonoBehaviour
     {
         Inventory.Instance.addItem(tempBonusItem.getProperty(IInventoryItem.INDEX));
         PlayerStatus.Instance.buyItem(tempBonusItem.getProperty(IInventoryItem.VALUE));
+        updatePlayerGold();
     }
     public void buyItemToCloset() 
     {
         Inventory.Instance.addItemCloset(tempBonusItem.getProperty(IInventoryItem.INDEX));
         PlayerStatus.Instance.buyItem(tempBonusItem.getProperty(IInventoryItem.VALUE));
+        updatePlayerGold();
+    }
+    public void updatePlayerGold() 
+    {
+        playerGold.text = "You currently have: " + PlayerStatus.Instance.getStatus(
+            PlayerStatus.GOLD) + "g";
     }
 }

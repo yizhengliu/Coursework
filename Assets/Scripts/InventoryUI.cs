@@ -219,7 +219,10 @@ public class InventoryUI : MonoBehaviour
             transfer.interactable = !(Inventory.Instance.Closet.Count == Inventory.CLOSET_LIMIT);
         else if (type == CLOSET)
             transfer.interactable = !(Inventory.Instance.Items.Count == Inventory.Instance.ItemLimit);
-        lastSelectedItem = index + (Inventory.ITEMS_PER_PAGE * Inventory.Instance.CurrentPage);
+        if (type != CLOSET)
+            lastSelectedItem = index + (Inventory.ITEMS_PER_PAGE * Inventory.Instance.CurrentPage);
+        else
+            lastSelectedItem = index;
     }
     //reset selection
     public void tentClosed()
