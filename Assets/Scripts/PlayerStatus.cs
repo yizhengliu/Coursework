@@ -49,7 +49,7 @@ public class PlayerStatus : MonoBehaviour
     public Dictionary<int, int> Conditions { get { return conditions; } }
     public List<int> Abilities { get { return abilities; } }
     public TextMeshProUGUI DescriptionDispay { set { descriptionDisplay = value; } }
-   
+    private bool isFirstTimeNirvana = true;
     public int Gold { get { return gold; } }
 
     public int getExpRequirement() 
@@ -260,12 +260,17 @@ public class PlayerStatus : MonoBehaviour
     public int dmgedByMonster(int dmg) 
     {
         currentHP -= dmg;
-        if (currentHP <= 0 && abilities.Contains(ABILITY_NIRVANA))
-            if (Random.Range(0, 100) < 30)
-                currentHP = 1;
+        if (isFirstTimeNirvana)
+            if (currentHP <= 0 && abilities.Contains(ABILITY_NIRVANA))
+                if (Random.Range(0, 100) < 30)
+                {
+                    currentHP = 1;
+                    isFirstTimeNirvana = false;
+                }
         return currentHP;
     }
 
+    public void resetNirvana() { isFirstTimeNirvana = true; }
     public void bonusChestGold(int amount) 
     {
         gold += amount;

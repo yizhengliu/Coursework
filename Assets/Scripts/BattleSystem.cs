@@ -168,6 +168,7 @@ public class BattleSystem : MonoBehaviour
             if (MonsterManager.Instance.isDead())
             {
                 battleEnd?.Invoke(this, -1);
+                PlayerStatus.Instance.resetNirvana();
                 StartCoroutine(enemyDead());
             }
             else

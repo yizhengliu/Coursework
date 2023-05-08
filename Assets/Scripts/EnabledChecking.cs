@@ -8,8 +8,6 @@ public class EnabledChecking : MonoBehaviour
     [SerializeField]
     private bool isNext;
     private Button pageChanger;
-    [SerializeField]
-    private GameObject anotherInventory = null;
     // Start is called before the first frame update
     private void Awake()
     {
