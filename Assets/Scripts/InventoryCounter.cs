@@ -10,20 +10,22 @@ public class InventoryCounter : MonoBehaviour
     private void Start()
     {
         for (int i = Inventory.Instance.CurrentPage; i > 0; i--)
-            toRight();
+            toRight(true);
     }
 
 
-    public void toRight() 
+    public void toRight(bool isWakeUp) 
     {
-        Inventory.Instance.toRight();
+        if(!isWakeUp)
+            Inventory.Instance.toRight();
         Vector3 currentPos = transform.position;
         currentPos.x += STEP_DISTANCE;
         transform.position = currentPos;
     }
-    public void toLeft()
+    public void toLeft(bool isWakeUp)
     {
-        Inventory.Instance.toLeft();
+        if (!isWakeUp)
+            Inventory.Instance.toLeft();
         Vector3 currentPos = transform.position;
         currentPos.x -= STEP_DISTANCE;
         transform.position = currentPos;

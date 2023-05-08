@@ -57,9 +57,6 @@ public class InventoryUI : MonoBehaviour
     private void Start()
     {
         refreshUI(null, null);
-        if (type == DUNGEON)
-            foreach (Button b in buttons)
-                b.interactable = false;
     }
     private void unselect(object sender, InventoryEventArgs args)
     {
@@ -70,6 +67,12 @@ public class InventoryUI : MonoBehaviour
         showPage();
         if(type != CLOSET)
             showIndicator();
+        if (type == DUNGEON)
+        {
+            Debug.Log("yes");
+            foreach (Button b in buttons)
+                b.interactable = false;
+        }
     }
 
     public void showIndicator()
@@ -147,8 +150,7 @@ public class InventoryUI : MonoBehaviour
     private void setAttributesProperty(int index, int chipFrameIndex, bool isInteractable, bool isVisiable)
     {
         chips[index].sprite = SpriteHolder.Instance.getItemChipFrame(chipFrameIndex);
-        if(buttons[index] != null)
-            buttons[index].interactable = isInteractable;
+        buttons[index].interactable = isInteractable;
         //contents[index]?.gameObject.SetActive(isVisiable);
         contents[index].color = isVisiable ? Color.white : transparentColor;
     }
@@ -299,12 +301,21 @@ public class InventoryUI : MonoBehaviour
 
     public void battlePageChanged() 
     {
+        for (int start = 0,
+            end = Inventory.ITEMS_PER_PAGE; start < end; start++)
+            if(start + (Inventory.ITEMS_PER_PAGE * Inventory.Instance.CurrentPage) < BattleSystem.SelectedChips.Length)
+                if (BattleSystem.SelectedChips[start + (Inventory.ITEMS_PER_PAGE * Inventory.Instance.CurrentPage)])
+                    chips[start].color = selectedColor;
+                else
+                    chips[start].color = Color.white;
+        /*
         for (int start = Inventory.ITEMS_PER_PAGE * Inventory.Instance.CurrentPage,
             end = start + Inventory.ITEMS_PER_PAGE; start < end; start++)
             if (BattleSystem.SelectedChips[start])
                 chips[start].color = selectedColor;
             else
                 chips[start].color = Color.white;
+        */
     }
 
     public void unsubEvents(object sender, int args) 
@@ -324,4 +335,5 @@ public class InventoryUI : MonoBehaviour
     {
         unsubEvents(null, -1);
     }
+    public void refresh() { refreshUI(null, null); }
 }

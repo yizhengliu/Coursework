@@ -8,8 +8,10 @@ public class EnabledChecking : MonoBehaviour
     [SerializeField]
     private bool isNext;
     private Button pageChanger;
+    [SerializeField]
+    private GameObject anotherInventory = null;
     // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
         pageChanger = GetComponent<Button>();
         checkAvailability();
@@ -17,10 +19,12 @@ public class EnabledChecking : MonoBehaviour
 
     public void checkAvailability() 
     {
+        if (pageChanger == null)
+            return;
         if (isNext)
         {
-            if (Inventory.Instance.CurrentPage == 
-                (Inventory.Instance.ItemLimit / Inventory.ITEMS_PER_PAGE) - 1)
+            if (Inventory.Instance.CurrentPage ==
+                Mathf.CeilToInt((float)Inventory.Instance.ItemLimit / (float)Inventory.ITEMS_PER_PAGE) - 1)
                 pageChanger.interactable = false;
             else
                 pageChanger.interactable = true;
@@ -34,4 +38,5 @@ public class EnabledChecking : MonoBehaviour
         }
     }
 
+    public void check() { checkAvailability(); }
 }
