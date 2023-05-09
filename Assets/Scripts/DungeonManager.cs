@@ -285,6 +285,8 @@ public class DungeonManager : MonoBehaviour
         }
         else if (info.Contains('f')) 
         {
+            Inventory.Instance.ItemRemoved -= checkAvaiabilityChestPopUpButtons;
+            sceneOver?.Invoke(this, 0);
             SceneManager.LoadScene("FIN");
         }
     }

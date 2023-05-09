@@ -118,7 +118,7 @@ public class InventoryUI : MonoBehaviour
                 }//if the item is on cooldown
                 else
                 {
-                    setAttributesProperty(i, SpriteHolder.OCCUPIED_MULTI_TIME_ALREADY, false, true);
+                    setAttributesProperty(i, SpriteHolder.OCCUPIED_MULTI_TIME_ALREADY, type == BATTLE ? false : true, true); 
                     cooldowns[i].text = "Turn Wait " + temp[i].CurrentCooldown;
                 }
                 //set the content of the chip (the weapon sprite)

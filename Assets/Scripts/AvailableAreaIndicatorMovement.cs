@@ -13,7 +13,6 @@ public class AvailableAreaIndicatorMovement : MonoBehaviour
         originalY = transform.position.y;
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.position = new Vector2(transform.position.x, 

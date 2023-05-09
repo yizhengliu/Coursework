@@ -24,6 +24,7 @@ public class MainCityEvent : MonoBehaviour
         loadDescription();
         setStages();
         checkPlayerStatus();
+        Inventory.Instance.refreshCooldown();
     }
     private void checkPlayerStatus() 
     {
