@@ -58,5 +58,6 @@ public static class GlobalStates
         stageExplored = 0;
         isNewGame = true;
         isfirstTimeDungeon = true;
+        currentStage = 0;
     }
 }
